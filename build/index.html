@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>多功能计算器</title>
+
+    <style>
+        body,p,h1{
+            margin: 0;
+            padding:0;
+        }
+        html{
+            height:100%;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+        }
+        .wrapper{
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            background-image: radial-gradient(rgba(0,0,0,0.1),rgba(0,0,255,0.3),rgba(0,0,255,0.8));
+        }
+        header{
+            box-sizing: border-box;
+            margin: 30px 0 20px;
+            text-align: center;
+            height: 40px;
+        }
+        main{
+            position: relative;
+            margin: 0 auto;
+            height: calc(100% - 80px);
+        }
+        footer{
+            position: fixed;
+            bottom:0;
+            width: 100%;
+            height: 40px;
+            text-align: center;
+        }
+
+        /*计算部分样式*/
+        .cal{
+            position: absolute;
+            left:50%;
+            top:50%;
+            transform: translate(-50%,-50%);
+
+            width: 80%;
+            height: 100%;
+
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            justify-content: center;
+        }
+        .cal>div{
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            width: 100%;
+            margin: 20px 0;
+        }
+        label{
+            width: 70px;
+            min-width: 70px;
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+        }
+        input[type="text"]{
+            box-sizing: border-box;
+            padding: 3px 20px;
+            width: 150px;
+            flex-grow: 1;
+            flex-shrink: 1;
+            height: 35px;
+            border-radius: 35px;
+            font-size: 16px;
+            outline: none;
+            border: none;
+        }
+        input[type="button"]{
+            box-sizing: border-box;
+            height: 35px;
+            width: 100px;
+            min-width: 100px;
+            border-radius: 35px;
+            margin-left: 15px;
+            background: #bc59a7;
+            border: none;
+            outline: none;
+            font-size: 20px;
+            font-weight: bold;
+            color: #72d5cf;
+        }
+
+        #csum{
+            position: relative;
+        }
+        #csum input{
+            height: 45px;
+            border-radius: 45px;
+        }
+        #csum input[type="button"]{
+            color: #fff;
+        }
+        #csum span{
+            position: absolute;
+            visibility: hidden;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+            border-top-color: red;
+            top:0;
+            left: 16px;
+            animation: errorPoint 1.5s infinite;
+        }
+        /*消息框样式，用于显示计算结果，以及错误信息*/
+        .msg{
+            visibility: hidden;
+            margin:0 !important;
+            padding-left: 10px;
+            height: 20px;
+            text-align: left;
+        }
+        @keyframes  errorPoint{
+            0%{
+                top:0;
+            }
+            100%{
+                top:4px;
+            }
+        }
+
+        /*移动端布局*/
+        @media screen and (max-width: 768px) {
+            main{
+                margin-top: -10px;
+            }
+            .cal>div{
+                flex-wrap: wrap;
+                margin: 20px 0;
+            }
+            label{
+                display: none;
+            }
+            input{
+                width: 100% !important;
+                margin-top: 5px;
+            }
+            input[type="button"]{
+                margin-left: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1>计算器</h1>
+    </header>
+    <main>
+        <div class="cal">
+            <!--输入计算式-->
+            <div id="csum"><span></span><input type="text"  placeholder="请输入您的计算表达式" name="calStr"><input type="button" value="计算" name="calButton"></div>
+            <!--添加常量-->
+            <div class="msg">
+                <span>输出结果：</span><output></output>
+            </div>
+            <div>
+                <label for="constantName">常量名</label><input type="text" id="constantName" placeholder="请输入您的常量">
+                <label for="constantValue">常量值</label><input type="text" id="constantValue" placeholder="请输入您的常量值">
+                <input type="button" value="添加" name="addConst" disabled="disabled">
+            </div>
+            <!--添加函数-->
+            <div>
+                <label for="functionName">函数名</label><input type="text" id="functionName" placeholder="请输入您的函数名">
+                <label for="functionValue">函数值</label><input type="text" id="functionValue" placeholder="请输入您的函数体">
+                <input type="button" value="添加" name="addFunc" disabled="disabled">
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy;2017</p>
+    </footer>
+</div>
+
+
+<script src="./main.js"></script>
+<script src="./test.js"></script>
+</body>
+</html>
