@@ -32,11 +32,10 @@
         }
         main{
             position: relative;
-            margin: 0 auto;
-            height: calc(100% - 80px);
+            margin: 0 auto 40px;
         }
         footer{
-            position: fixed;
+            position: absolute;
             bottom:0;
             width: 100%;
             height: 40px;
@@ -45,25 +44,17 @@
 
         /*计算部分样式*/
         .cal{
-            position: absolute;
-            left:50%;
-            top:50%;
-            transform: translate(-50%,-50%);
-
+            margin: 10px auto;
             width: 80%;
             height: 100%;
 
             display: flex;
-            flex-wrap: wrap;
-            align-content: flex-start;
-            justify-content: center;
+            flex-direction:column;
         }
-        .cal>div{
+        div.flexBox{
             display: flex;
-            flex-wrap: nowrap;
             justify-content: center;
             width: 100%;
-            margin: 20px 0;
         }
         label{
             width: 70px;
@@ -90,13 +81,16 @@
             width: 100px;
             min-width: 100px;
             border-radius: 35px;
-            margin-left: 15px;
             background: #bc59a7;
             border: none;
             outline: none;
             font-size: 20px;
             font-weight: bold;
-            color: #72d5cf;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="button"]:active{
+            background-color: blueviolet;
         }
 
         #csum{
@@ -111,7 +105,7 @@
         }
         #csum span{
             position: absolute;
-            visibility: hidden;
+            z-index: 999;
             width: 0;
             height: 0;
             border: 8px solid transparent;
@@ -122,9 +116,6 @@
         }
         /*消息框样式，用于显示计算结果，以及错误信息*/
         .msg{
-            visibility: hidden;
-            margin:0 !important;
-            padding-left: 10px;
             height: 20px;
             text-align: left;
         }
@@ -139,22 +130,40 @@
 
         /*移动端布局*/
         @media screen and (max-width: 768px) {
-            main{
-                margin-top: -10px;
+            header{
+                margin: 10px;
             }
             .cal>div{
                 flex-wrap: wrap;
-                margin: 20px 0;
+                margin: 10px 0;
             }
             label{
                 display: none;
             }
             input{
                 width: 100% !important;
-                margin-top: 5px;
+                margin-top: 10px;
             }
             input[type="button"]{
                 margin-left: 0;
+            }
+        }
+        @media screen and (min-width: 768px) {
+            header{
+                margin: 20px;
+            }
+            .cal>div{
+                flex-wrap: nowrap;
+                margin: 20px 0;
+            }
+            label{
+                display: inline-block;
+            }
+            input{
+
+            }
+            input[type="button"]{
+                margin-left: 15px;
             }
         }
 
@@ -168,21 +177,25 @@
     <main>
         <div class="cal">
             <!--输入计算式-->
-            <div id="csum"><span></span><input type="text"  placeholder="请输入您的计算表达式" name="calStr"><input type="button" value="计算" name="calButton"></div>
+            <div id="csum" class="flexBox">
+                <span></span>
+                <input type="text"  placeholder="请输入您的计算表达式" name="calStr" value="abs(-5+ln(e))">
+                <input type="button" value="计算" name="calButton">
+            </div>
             <!--添加常量-->
             <div class="msg">
-                <span>输出结果：</span><output></output>
+                <span>&gt;&gt;&gt;输出结果：</span><output></output>
             </div>
-            <div>
-                <label for="constantName">常量名</label><input type="text" id="constantName" placeholder="请输入您的常量">
-                <label for="constantValue">常量值</label><input type="text" id="constantValue" placeholder="请输入您的常量值">
-                <input type="button" value="添加" name="addConst" disabled="disabled">
+            <div class="flexBox">
+                <label for="constantName">常量名</label><input type="text" id="constantName" placeholder="请输入您的常量" value="Ten">
+                <label for="constantValue">常量值</label><input type="text" id="constantValue" placeholder="请输入您的常量值" value="10">
+                <input type="button" value="添加" name="addConst">
             </div>
             <!--添加函数-->
-            <div>
-                <label for="functionName">函数名</label><input type="text" id="functionName" placeholder="请输入您的函数名">
-                <label for="functionValue">函数值</label><input type="text" id="functionValue" placeholder="请输入您的函数体">
-                <input type="button" value="添加" name="addFunc" disabled="disabled">
+            <div class="flexBox">
+                <label for="functionName">函数名</label><input type="text" id="functionName" placeholder="请输入您的函数名" value="sum">
+                <label for="functionValue">函数值</label><input type="text" id="functionValue" placeholder="请输入您的函数体" value="function(x,y){return x+y;}">
+                <input type="button" value="添加" name="addFunc">
             </div>
         </div>
     </main>
@@ -193,6 +206,7 @@
 
 
 <script src="./main.js"></script>
-<script src="./test.js"></script>
 </body>
 </html>
+
+<!--<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.js"></-->

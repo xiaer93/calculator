@@ -1,7 +1,9 @@
-const constans=require("./constans.js").constants;
+const constants=require("./constants.js").constants;
 const methods=require("./methods.js").methods;
 const argCount=require("./methods.js").argCount;
 
+const addConst=require("./constants").addConstant;
+const addMethod=require("./methods").addMethod;
 
 const Calculator=function () {
     //基础运算符
@@ -38,7 +40,7 @@ const Calculator=function () {
     };
     //获取常量值
     let getConstant=function (name) {
-        return constans[name];
+        return constants[name];
     };
     //获取函数值
     let getMethod=function (func,args) {
@@ -261,8 +263,8 @@ const Calculator=function () {
                 //如果是常量，从constents中获取对应的值
                 //后置位参考数字
                 else {
-                    if(constans.hasOwnProperty(name)){
-                        ret=constans[name];
+                    if(constants.hasOwnProperty(name)){
+                        ret=constants[name];
                     }else{
                         //变量名不存在抛出错误
                         throw new Error(`14:${beg}`);
@@ -336,18 +338,27 @@ const Calculator=function () {
 };
 
 //输出接口函数！
-const csum=function (str) {
-    let cal=new Calculator();
+const cal=new Calculator();
+
+const catchError=function (func) {
     let ret;
     try {
-        ret=cal(str);
-    }catch(e) {
-        //捕获异常，并拆解为数组！
-        //ret=e.message.split(":");
+        ret=func.apply(null,Array.prototype.slice.call(arguments,1));
+    }catch (e){
         ret=e;
     }
     return ret;
 };
 
-module.exports.csum=csum;
+module.exports={
+    csum:function (str) {
+        return catchError(cal,str);
+    },
+    addMethod:function (name,body) {
+        return catchError(addMethod,name,body);
+    },
+    addConst:function (name,value) {
+        return catchError(addConst,name,value);
+    }
+};
 

@@ -1,37 +1,64 @@
-const csum=require("./core").csum;
+const core=require("./core");
 const jQuery=require("jquery");
 const errorMsg=require("./error.js").error;
 
+const csum=core.csum;
+const addConst=core.addConst;
+const addMethod=core.addMethod;
+
 jQuery(document).ready(function ($) {
+    //初始化动画
+    $("#csum>span").slideUp("fast");
+    $(".msg").slideUp("fast");
 
-    $(".cal").click(function (event) {
-        //清除动画
-        $(".msg").slideUp("fast");
-        $("#csum>span").slideUp("fast");
+    $(".cal")
+        .on("click","input[name='calButton']",function () {
+            $("#csum>span").slideUp("fast");
 
-        let name,
-            value,
-            str,
-            result;
-        switch (event.target.name){
-            case "calButton":
-                str=$("input[name='calStr']").val();
-                result=csum(str);
-                break;
-        }
+            let str=$("input[name='calStr']").val();
+            let result=csum(str);
 
-        if(typeof result ==="number"){
-            $(".msg output").val(result);
-            $(".msg").css("visibility","visible").slideDown("slow");
-        }else if(result instanceof Error){
-            let msg,index,tmp;
-            tmp=result.message.split(":");
-            msg=errorMsg[tmp[0]];
-            index=Number(tmp[1]);
-            $(".msg output").val(msg);
-            $(".msg").css("visibility","visible").slideDown("slow");
-            $("#csum>span").css("visibility","visible").css("left",20+index*8.89189+"px").slideDown("slow");
-        }
+            if(typeof result ==="number"){
+                $(".msg output").val(result);
+                $(".msg").slideDown("slow");
+            }else if(result instanceof Error){
+                let msg,index,tmp;
+                tmp=result.message.split(":");
+                msg=errorMsg[tmp[0]];
+                index=Number(tmp[1]);
+                $(".msg output").val(msg);
+                $(".msg").slideDown("slow");
+                $("#csum>span").css("left",20+index*8.89189+"px").slideDown("slow");
+            }
+        })
+        .on("click","input[name='addConst']",function () {
+            let result=addConst($("#constantName").val(),$("#constantValue").val());
+            if(result instanceof Error){
+                let msg,tmp;
+                tmp=result.message.split(":");
+                msg=errorMsg[tmp[0]];
+                //index=Number(tmp[1]);
+                $(".msg output").val(msg);
+                $(".msg").slideDown("slow");
+            }
+        })
+        .on("click","input[name='addFunc']",function () {
+            let result=addMethod($("#functionName").val(),$("#functionValue").val());
+            if(result instanceof Error){
+                let msg,tmp;
+                tmp=result.message.split(":");
+                msg=errorMsg[tmp[0]];
+                $(".msg output").val(msg);
+                $(".msg").slideDown("slow");
+            }
+        })
+        .on("click",function (event) {
+            event.stopPropagation();
+        });
+    $("input[name='calStr']").change(function () {
+       if($(this).val().length===0){
+           $(".msg").slideUp("fast");
+       }
     });
     $(document).keyup(function (event) {
         if(event.keyCode===13){

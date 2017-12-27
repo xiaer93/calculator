@@ -46,38 +46,40 @@ for(let key in __methods){
             /*如果为三角函数，且输入为角度，则需要进行角度转弧度计算！*/
             let ret=oriFunc.apply(null,(__isTriangle.indexOf(key)>=0 && status.isAngle)?args.map(a=>__ang2rad(a)):args);
             if(typeof ret !== "number")
-                throw new Error(`29:${ret}`);
+                throw new Error(`29`);
             else
                 return  ret;
         }
     }
 }
 
-//添加自定义函数功能,还是应该提供基础编辑器，通过编辑器编写自定义函数
-const addMethod=function (name,body) {
+//添加自定义函数功能,还是应该提供基础编辑器，通过编辑器编写自定义函数?
+const __addMethod=function (name,body) {
     /*检查函数名是否正确，同时是否已经存在*/
     let matchs=/^[\s]*([a-zA-Z]+?[\w]*)[\s]*$/.exec(name);
     if(matchs===null)
-        throw new Error(`21,{$name}`);
-    if(!methods.hasOwnProperty(matchs[1]))
-        throw new Error(`23,{$name}`);
+        throw new Error(`21`);
+    if(__methods.hasOwnProperty(matchs[1]))
+        throw new Error(`23`);
     name=matchs[1];
     /*检查body是否为function(){}形式*/
-    body=body.replace(/\s/g,'');
     matchs=/^[\s]*function[\s]*\(([\w]+([\,]{1}[\w]+)*)*\)[\s]*\{[\w\W]*\}$/gmi.exec(body);
     if(matchs===null){
-        throw new Error(`22:{$body}`);
+        throw new Error(`22`);
     }
     /*添加函数*/
+    //通过eval来得到函数！
+    var getFunc=eval("(function(){return "+body+ "})()");
     let argsLen=matchs[1].split(",").length;
-    argCount[name]=argsLen;
-    methods[name]=body;
-
+    __argCount[name]=argsLen;
+    __methods[name]=getFunc;
+    return true;
 };
 
 module.exports={
     methods:__methods,
-    argCount:__argCount
+    argCount:__argCount,
+    addMethod:__addMethod
 };
 
 
