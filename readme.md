@@ -2,7 +2,7 @@
 
 > 在线使用
 
-[简易的计算器](http://clovey.party/SimpleCalculator/build/index.html)
+[简易的计算器](http://clovey.party/calculator/build/index.html)
 
 ## 介绍
 
