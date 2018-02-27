@@ -1,3 +1,7 @@
+/**
+ * 系统默认方法
+ */
+
 const status=require("./status").status;
 
 const __methods={
@@ -32,10 +36,11 @@ const __ang2rad=a=>a/180*Math.PI;
 const __rad2ang=r=>r/Math.PI*180;
 
 /*改造函数，增加函数参数检查功能，增加角度弧度检测*/
-for(let key in __methods){
-    let oriFunc=__methods[key];
-    let oriArgsCount=__argCount[key];
-    __methods[key]=function (...args) {
+for(let name in __methods){
+    //局部变量
+    let oriFunc=__methods[name];
+    let oriArgsCount=__argCount[name];
+    __methods[name]=function (...args) {
         if(args.length>oriArgsCount){
             throw new Error(`25`);
         }else if(args.length<oriArgsCount){
@@ -44,7 +49,7 @@ for(let key in __methods){
             //增加argCnt属性，储存函数的变量数目！
             /*__methods[key].argCnt=oriArgsCount;*/
             /*如果为三角函数，且输入为角度，则需要进行角度转弧度计算！*/
-            let ret=oriFunc.apply(null,(__isTriangle.indexOf(key)>=0 && status.isAngle)?args.map(a=>__ang2rad(a)):args);
+            let ret=oriFunc.apply(null,(__isTriangle.indexOf(name)>=0 && status.isAngle)?args.map(a=>__ang2rad(a)):args);
             if(typeof ret !== "number")
                 throw new Error(`29`);
             else
@@ -53,28 +58,26 @@ for(let key in __methods){
     }
 }
 
-//添加自定义函数功能,还是应该提供基础编辑器，通过编辑器编写自定义函数?
-const __addMethod=function (name,body) {
-    /*检查函数名是否正确，同时是否已经存在*/
-    let matchs=/^[\s]*([a-zA-Z]+?[\w]*)[\s]*$/.exec(name);
-    if(matchs===null)
-        throw new Error(`21`);
-    if(__methods.hasOwnProperty(matchs[1]))
-        throw new Error(`23`);
-    name=matchs[1];
-    /*检查body是否为function(){}形式*/
-    matchs=/^[\s]*function[\s]*\(([\w]+([\,]{1}[\w]+)*)*\)[\s]*\{[\w\W]*\}$/gmi.exec(body);
-    if(matchs===null){
-        throw new Error(`22`);
-    }
-    /*添加函数*/
-    //通过eval来得到函数！
-    var getFunc=eval("(function(){return "+body+ "})()");
-    let argsLen=matchs[1].split(",").length;
-    __argCount[name]=argsLen;
-    __methods[name]=getFunc;
+//添加自定义函数功能，（在现有的计算功能上拓展）
+const __addMethod=function (name,oriArg,fn) {
+    __argCount[name]=oriArg.length;
+    __methods[name]=function (...args) {
+        let oriArgsCount=__argCount[name];
+        if(args.length>oriArgsCount){
+            throw new Error(`25`);
+        }else if(args.length<oriArgsCount){
+            throw new Error(`26`);
+        }else{
+            let ret=fn.apply(null,(__isTriangle.indexOf(name)>=0 && status.isAngle)?args.map(a=>__ang2rad(a)):args);
+            if(typeof ret !== "number")
+                throw new Error(`29`);
+            else
+                return  ret;
+        }
+    };
     return true;
 };
+
 
 module.exports={
     methods:__methods,

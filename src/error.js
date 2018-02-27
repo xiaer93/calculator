@@ -21,5 +21,5 @@ const errorMsg={
 
     41:"表达式结果异常！",
     42:"输入计算式长度为零！"
-}
+};
 module.exports.error=errorMsg;

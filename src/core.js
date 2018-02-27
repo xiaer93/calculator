@@ -1,7 +1,5 @@
 const constants=require("./constants.js").constants;
 const methods=require("./methods.js").methods;
-const argCount=require("./methods.js").argCount;
-
 const addConst=require("./constants").addConstant;
 const addMethod=require("./methods").addMethod;
 
@@ -14,7 +12,7 @@ const Calculator=function () {
         "/":(a,b)=>a/b,
         "%":(a,b)=>a%b,
         "^":(a,b)=>Math.pow(a,b)
-    }
+    };
     //基础运算符等级
     let opLever={
         "+":1,
@@ -295,9 +293,9 @@ const Calculator=function () {
                     outStack.push(tmpStack.pop());
                 }
                 if(tmpStack[tmpStack.length-1]==="(")
-                    tmpStack.pop()
+                    tmpStack.pop();
                 else
-                    throw new Error(`35:${index}`)
+                    throw new Error(`35:${index}`);
                 index+=1;
             }
             //如果不为数字、字母、基础运算符、左右圆括号，则抛出错误！
@@ -316,7 +314,7 @@ const Calculator=function () {
         //从outStack头部取值。
         //如果为数值，则加入retStack栈中
         //如果为基础运算符，则从retStack栈顶取2个值执行运算，接着将计算结果压入retStack栈中！
-        let retStack=[]
+        let retStack=[];
         while (outStack.length>0){
             if(typeof outStack[0] ==="number"){
                 retStack.push(outStack.shift());
@@ -354,8 +352,8 @@ module.exports={
     csum:function (str) {
         return catchError(cal,str);
     },
-    addMethod:function (name,body) {
-        return catchError(addMethod,name,body);
+    addMethod:function (name,oriArg,body) {//???
+        return catchError(addMethod,name,oriArg,body);
     },
     addConst:function (name,value) {
         return catchError(addConst,name,value);

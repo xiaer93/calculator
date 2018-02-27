@@ -68,7 +68,7 @@ describe("函数检测",function () {
     it('pow(pow(2,2),pow(2,2))',function () {
         expect(csum("pow(pow(2,2),pow(2,2))")).to.be.equal(256);
     });
-})
+});
 describe("特殊检测",function () {
     it('-1',function () {
         expect(csum("-1")).to.be.equal(-1);
@@ -96,7 +96,7 @@ describe("错误检测",function () {
     it('1+pow(2,2,2)',function () {
         expect(csum("1+pow(2,2,2)")).to.be.an.instanceof(Error);
     })
-})
+});
 
 
 /*

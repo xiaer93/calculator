@@ -40,15 +40,35 @@ jQuery(document).ready(function ($) {
                 //index=Number(tmp[1]);
                 $(".msg output").val(msg);
                 $(".msg").slideDown("slow");
+            }else{
+                $(".msg output").val("添加成功！");
+                $(".msg").slideDown("slow");
             }
         })
         .on("click","input[name='addFunc']",function () {
-            let result=addMethod($("#functionName").val(),$("#functionValue").val());
+            debugger;
+            let name=$("#functionName").val();
+            let arg=$("#functionArg").val();
+            let body=$("#functionValue").val();
+
+            function fn(...a) {
+                let args=arg.split(',');
+                let ret=body;
+                args.forEach(function (t,number) {
+                    ret=ret.replace(t,a[number]);
+                });
+                ret=csum(ret);
+                return ret;
+            }
+            let result=addMethod(name,arg.split(','),fn);
             if(result instanceof Error){
                 let msg,tmp;
                 tmp=result.message.split(":");
                 msg=errorMsg[tmp[0]];
                 $(".msg output").val(msg);
+                $(".msg").slideDown("slow");
+            }else{
+                $(".msg output").val("添加成功！");
                 $(".msg").slideDown("slow");
             }
         })
